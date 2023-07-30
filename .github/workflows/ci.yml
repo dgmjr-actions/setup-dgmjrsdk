@@ -30,8 +30,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: Local
       - name: Verify NuGet/.NET/global.json installed properly
+        shell: bash
         run: |
-          if [ -z $(dotnet nuget list source | grep vars.GIT_NUGET_ENDPOINT) ] exit 1; fi;
+          if [ -z $(dotnet nuget list source | grep ${{ vars.GIT_NUGET_ENDPOINT }}) ] exit 1; fi;
           if [ -z $(dotnet nuget list source | grep nuget.dgmjr.io) ] exit 1; fi;
           if [ -z $(ls global.json | grep global.json) ] exit 1; fi;
             
