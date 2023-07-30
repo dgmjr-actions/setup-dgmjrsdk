@@ -26,12 +26,14 @@ inputs:
 runs:
   using: composite
   steps:
-    - id: Restore-dotnet-file
-      uses: dgmjr-actions/download-global.json@main
     - id: Setup-dotnet
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
+    - id: Restore-dotnet-file
+      uses: dgmjr-actions/download-global.json@main
+      with:
+        token: ${{ inputs.token }}
     - id: Setup-NuGet
       uses: NuGet/setup-nuget@v1.2.0
       with:
