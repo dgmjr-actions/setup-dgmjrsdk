@@ -36,13 +36,8 @@ runs:
         token: ${{ inputs.token }}
     - id: Setup-NuGet
       uses: NuGet/setup-nuget@v1.2.0
-      with:
-        # NuGet version to install. Can be `latest`, `preview`, a concrete version like `5.3.1`, or a semver range specifier like `5.x`.
-        nuget-version: latest # optional, default is latest
-        # NuGet API Key to configure.
-        nuget-api-key: ${{ inputs.token }} # optional
-        # Source to scope the NuGet API Key to.
-        nuget-api-key-source: ${{ inputs.git-nuget-endpoint }} # optional
+    - id: Setup-GitHub-Packages-NuGet-Source
+      run: dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --password ${{ inputs.token }} --store-password-in-clear-text
     - id: Setup-Azure-Blobs-NuGet
-      run: dotnet nuget add source ${{ inputs.private-nuget-endpoint }}
+      run: dotnet nuget add source ${{ inputs.private-nuget-endpoint }} --name dgmjr-io
       shell: bash
