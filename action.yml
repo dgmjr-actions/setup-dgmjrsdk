@@ -14,6 +14,10 @@ inputs:
   git-token:
     type: string
     required: true
+  git-username
+    type: string
+    required: false
+    default: dgmjr
   git-nuget-endpoint:
     type: string
     required: false
@@ -42,7 +46,7 @@ runs:
       with:
         nuget-api-key: ${{ inputs.nuget-api-key }}
     - id: Setup-GitHub-Packages-NuGet-Source
-      run: dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --password ${{ inputs.git-token }} --store-password-in-clear-text
+      run: dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --username ${{ inputs.git-username }} --password ${{ inputs.git-token }} --store-password-in-clear-text
       shell: bash
     - id: Setup-Azure-Blobs-NuGet
       run: dotnet nuget add source ${{ inputs.private-nuget-endpoint }} --name dgmjr-io
