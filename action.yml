@@ -14,6 +14,14 @@ inputs:
   token:
     type: string
     required: true
+  git-nuget-endpoint:
+    type: string
+    required: false
+    default: https://nuget.pkg.github.com/dgmjr-io/index.json
+  private-nuget-endpoint:
+    type: string
+    required: false
+    default: https://nuget.dgmjr.io/index.json
 
 runs:
   using: composite
@@ -32,6 +40,6 @@ runs:
         # NuGet API Key to configure.
         nuget-api-key: ${{ inputs.token }} # optional
         # Source to scope the NuGet API Key to.
-        nuget-api-key-source: ${{ vars.GIT_NUGET_ENDPOINT }} # optional
+        nuget-api-key-source: ${{ inputs.git-nuget-endpoint }} # optional
     - id: Setup-Azure-Blobs-NuGet
-      run: dotnet nuget add source https://nuget.dgmjr.io/index.json/index.json
+      run: dotnet nuget add source ${{ inputs.private-nuget-endpoint }}
