@@ -14,7 +14,7 @@ inputs:
   git-token:
     type: string
     required: true
-  git-username
+  git-username:
     type: string
     required: false
     default: dgmjr
