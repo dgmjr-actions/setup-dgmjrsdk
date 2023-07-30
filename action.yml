@@ -11,7 +11,7 @@ inputs:
     type: string
     default: Local
     required: false
-  token:
+  git-token:
     type: string
     required: true
   git-nuget-endpoint:
@@ -22,6 +22,9 @@ inputs:
     type: string
     required: false
     default: https://nuget.dgmjr.io/index.json
+  nuget-api-key:
+    type: string
+    required: false
 
 runs:
   using: composite
@@ -33,11 +36,14 @@ runs:
     - id: Restore-dotnet-file
       uses: dgmjr-actions/download-global.json@main
       with:
-        token: ${{ inputs.token }}
+        token: ${{ inputs.git-token }}
     - id: Setup-NuGet
       uses: NuGet/setup-nuget@v1.2.0
+      with:
+        nuget-api-key: ${{ inputs.nuget-api-key }}
     - id: Setup-GitHub-Packages-NuGet-Source
-      run: dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --password ${{ inputs.token }} --store-password-in-clear-text
+      run: dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --password ${{ inputs.git-token }} --store-password-in-clear-text
+      shell: bash
     - id: Setup-Azure-Blobs-NuGet
       run: dotnet nuget add source ${{ inputs.private-nuget-endpoint }} --name dgmjr-io
       shell: bash
