@@ -1,0 +1,46 @@
+name: CI Build
+
+concurrency:
+  group: CI/CD
+  cancel-in-progress: true
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  ci-build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Runs a single command using the runners shell
+      - name: Run setup-dgmjrsdk
+        uses: dgmjr-actions/setup-dgmjrsdk@main
+        with:
+          git-token: ${{ secrets.GITHUB_TOKEN }}
+          environment: Local
+          git-nuget-endpoint: ${{ vars.GIT_NUGET_ENDPOINT }}
+          private-nuget-endpoint: ${{ vars.FEEDZ_IO_ENDPOINT_URL }}
+          private-nuget-api-key: ${{ secrets.FEEDZ_IO_TOKEN }}
+          repo: dgmjr-io/DgmjrSdk
+      - name: Verify Git NuGet endpoint installed properly
+        shell: bash
+        run: if [ -z $(dotnet nuget list source | grep ${{ vars.GIT_NUGET_ENDPOINT }}) ]; then exit 1; fi;
+      - name: Verify DGMJR-IO NuGet Endpoint installed properly
+        shell: bash
+        run: if [ -z $(dotnet nuget list source | grep ${{ vars.FEEDZ_IO_ENDPOINT_URL }}) ]; then exit 1; fi;
+      - name: Verify global.json downloaded properly
+        shell: bash
+        run: if [ -z $(ls global.json | grep global.json) ]; then exit 1; fi;
+            

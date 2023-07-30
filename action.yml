@@ -1,0 +1,106 @@
+name: Setup DGMJR-IO SDK
+author: David G. Moore, Jr., <david@dgmjr.io>
+description: Prepares the repo for compilation with the DGMJR-IO SDK
+
+branding:
+  icon: file-plus
+  color: green
+
+inputs:
+  environment:
+    default: Local
+    required: false
+    description: The environment to build for
+  git-token:
+    required: true
+    description: GitHub Token
+  git-username:
+    required: false
+    default: dgmjr
+    description: GitHub Username
+  git-nuget-endpoint:
+    required: false
+    default: https://nuget.pkg.github.com/dgmjr-io/index.json
+    description: GitHub NuGet Endpoint
+  private-nuget-endpoint:
+    required: false
+    default: https://dgmjr.nuget.software/index.json
+    description: DGMJR-IO Private NuGet Endpoint
+  private-nuget-api-key:
+    required: false
+    default:
+    description: DGMJR-IO Private NuGet API Key
+  nuget-api-key:
+    required: false
+    description: NuGet API Key
+  repo:
+    required: true
+    default: dgmjr-io/DgmjrSdk
+    description: Repository to build
+  configuration:
+    required: false
+    default: Release
+    description: Configuration to build
+  package-version-override:
+    required: false
+    default: 0.0.1
+    description: Version to use for the package
+  dotnet-version:
+    required: false
+    default: 9.0.x
+    description: Version of DotNet to use
+
+runs:
+  using: composite
+  steps:
+    - id: setup-dotnet
+      name: Setup DotNet
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
+    - id: restore-dotnet-file
+      name: Restore DotNet File
+      uses: dgmjr-actions/restore-dotnet-file@main
+    - id: restore-minver
+      name: Restore MinVer CLI
+      shell: pwsh
+      run: dotnet tool update -g minver-cli
+    - id: setup-private-nuget
+      name: Setup NuGet
+      uses: dgmjr-actions/setup-nuget@main
+      with:
+        key: ${{ inputs.private-nuget-api-key }}
+        source: ${{ inputs.private-nuget-endpoint }}
+        name: private
+    - id: setup-gh-packages
+      name: Setup GitHub Packages NuGet Source
+      uses: dgmjr-actions/setup-nuget@main
+      with:
+        key: ${{ inputs.git-token }}
+        source: ${{ inputs.git-nuget-endpoint }}
+        name: GitHub
+      # run: |
+      #   extantGitHubNuget=$(dotnet nuget list source | grep GitHub)
+      #   if [ -z "$extantGitHubNuget" ]
+      #   then
+      #     dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --username ${{ inputs.git-username }} --password ${{ inputs.git-token }} --store-password-in-clear-text
+      #   fi
+      # shell: bash
+    - id: restore-packages
+      uses: dgmjr-actions/git-checkout@main
+      with:
+        token: ${{ inputs.git-token }}
+        repository: dgmjr-io/Packages
+        path: Packages
+    - id: restore-target
+      name: Restore the Target Repository
+      uses: dgmjr-actions/git-checkout@main
+      with:
+        token: ${{ inputs.git-token }}
+        repository: ${{ inputs.repo }}
+        path: Repo
+    - id: restore-global-json
+      name: Restore global.json
+      uses: dgmjr-actions/restore-global.json@main
+      with:
+        token: ${{ inputs.git-token }}
