@@ -43,3 +43,4 @@ runs:
         nuget-api-key-source: ${{ inputs.git-nuget-endpoint }} # optional
     - id: Setup-Azure-Blobs-NuGet
       run: dotnet nuget add source ${{ inputs.private-nuget-endpoint }}
+      shell: bash
