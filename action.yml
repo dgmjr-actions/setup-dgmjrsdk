@@ -1,0 +1,35 @@
+name: Prepares the repo for compilation with the DGMJR-IO SDK
+author: David G. Moore, Jr., <david@dgmjr.io>
+description: Prepares the repo for compilation with the DGMJR-IO SDK
+
+branding:
+  icon: file-plus
+  color: green
+
+inputs:
+  - name: environment
+    default: Local
+    required: false
+  - name: token
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - id: Restore-dotnet-file
+      uses: dgmjr-actions/download-global.json@main
+    - id: Setup-dotnet
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - id: Setup-NuGet
+      uses: NuGet/setup-nuget@v1.2.0
+      with:
+        # NuGet version to install. Can be `latest`, `preview`, a concrete version like `5.3.1`, or a semver range specifier like `5.x`.
+        nuget-version: latest # optional, default is latest
+        # NuGet API Key to configure.
+        nuget-api-key: ${{ inputs.token }} # optional
+        # Source to scope the NuGet API Key to.
+        nuget-api-key-source: ${{ vars.GIT_NUGET_ENDPOINT }} # optional
+    - id: Setup-Azure-Blobs-NuGet
+      run: dotnet nuget add source https://nuget.dgmjr.io/index.json/index.json
