@@ -7,10 +7,12 @@ branding:
   color: green
 
 inputs:
-  - name: environment
+  environment:
+    type: string
     default: Local
     required: false
-  - name: token
+  token:
+    type: string
     required: true
 
 runs:
