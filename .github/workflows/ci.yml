@@ -27,12 +27,17 @@ jobs:
       - name: Run setup-dgmjrsdk
         uses: dgmjr-actions/setup-dgmjrsdk@main
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          git-token: ${{ secrets.GITHUB_TOKEN }}
           environment: Local
-      - name: Verify NuGet/.NET/global.json installed properly
+          git-nuget-endpoint: ${{ vars.GIT_NUGET_ENDPOINT }}
+          private-nuget-endpoint: ${{ vars.DGMJR_IO_NUGET_ENDPOINT }}
+      - name: Verify Git NuGet endpoint installed properly
         shell: bash
-        run: |
-          if [ -z $(dotnet nuget list source | grep ${{ vars.GIT_NUGET_ENDPOINT }}) ] exit 1; fi;
-          if [ -z $(dotnet nuget list source | grep nuget.dgmjr.io) ] exit 1; fi;
-          if [ -z $(ls global.json | grep global.json) ] exit 1; fi;
+        run: if [ -z $(dotnet nuget list source | grep ${{ vars.GIT_NUGET_ENDPOINT }}) ] exit 1; fi;
+      - name: Verify DGMJR-IO NuGet Endpoint installed properly
+        shell: bash
+        run: if [ -z $(dotnet nuget list source | grep ${{ vars.DGMJR_IO_NUGET_ENDPOINT }}) ] exit 1; fi;
+      - name: Verify global.json downloaded properly
+        shell: bash
+        run: if [ -z $(ls global.json | grep global.json) ] exit 1; fi;
             
