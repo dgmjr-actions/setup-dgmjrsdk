@@ -33,11 +33,11 @@ jobs:
           private-nuget-endpoint: ${{ vars.DGMJR_IO_NUGET_ENDPOINT }}
       - name: Verify Git NuGet endpoint installed properly
         shell: bash
-        run: if [ -z $(dotnet nuget list source | grep ${{ vars.GIT_NUGET_ENDPOINT }}) ] exit 1; fi;
+        run: if [ -z $(dotnet nuget list source | grep ${{ vars.GIT_NUGET_ENDPOINT }}) ]; then exit 1; fi;
       - name: Verify DGMJR-IO NuGet Endpoint installed properly
         shell: bash
-        run: if [ -z $(dotnet nuget list source | grep ${{ vars.DGMJR_IO_NUGET_ENDPOINT }}) ] exit 1; fi;
+        run: if [ -z $(dotnet nuget list source | grep ${{ vars.DGMJR_IO_NUGET_ENDPOINT }}) ]; then exit 1; fi;
       - name: Verify global.json downloaded properly
         shell: bash
-        run: if [ -z $(ls global.json | grep global.json) ] exit 1; fi;
+        run: if [ -z $(ls global.json | grep global.json) ]; then exit 1; fi;
             
