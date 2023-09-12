@@ -37,9 +37,6 @@ inputs:
     type: string
     required: true
     default: dgmjr-io/DgmjrSdk
-  build-project-path:
-    type: strng
-    required: true
   configuration:
     type: string
     required: false
