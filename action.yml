@@ -25,7 +25,11 @@ inputs:
   private-nuget-endpoint:
     type: string
     required: false
-    default: https://nuget.dgmjr.io/index.json
+    default: https://proget.dgmjr.io/nuget/live/v3/index.json
+  private-nuget-api-key:
+    type: string
+    required: false
+    default: 
   nuget-api-key:
     type: string
     required: false
@@ -48,6 +52,6 @@ runs:
     - id: Setup-GitHub-Packages-NuGet-Source
       run: dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --username ${{ inputs.git-username }} --password ${{ inputs.git-token }} --store-password-in-clear-text
       shell: bash
-    - id: Setup-Azure-Blobs-NuGet
-      run: dotnet nuget add source ${{ inputs.private-nuget-endpoint }} --name dgmjr-io
+    - id: Setup-DGMJR-IO-Proget
+      run: dotnet nuget add source ${{ inputs.private-nuget-endpoint }} --name dgmjr-io --username Admin --api-key ${{ inputs.private-nuget-api-key }} --store-password-in-clear-text
       shell: bash
