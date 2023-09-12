@@ -31,6 +31,7 @@ jobs:
           environment: Local
           git-nuget-endpoint: ${{ vars.GIT_NUGET_ENDPOINT }}
           private-nuget-endpoint: ${{ vars.DGMJR_IO_NUGET_ENDPOINT }}
+          repo: dgmjr-io/DgmjrSdk
       - name: Verify Git NuGet endpoint installed properly
         shell: bash
         run: if [ -z $(dotnet nuget list source | grep ${{ vars.GIT_NUGET_ENDPOINT }}) ]; then exit 1; fi;
