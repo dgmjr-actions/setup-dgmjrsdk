@@ -70,11 +70,11 @@ runs:
     - id: Restore-the-Packages-Folder
       uses: dgmjr-io/Packages
       with:
-        token: ${{ inputs.git-token }}
+        token: ${{ inputs.git-token }}@main
         path: Packages
     - id: Restore-the-Target-Repository
       uses: ${{ inputs.repo }}
       with:
-        token: ${{ inputs.git-token }}
+        token: ${{ inputs.git-token }}@main
         path: Repo
         
