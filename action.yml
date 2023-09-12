@@ -33,6 +33,21 @@ inputs:
   nuget-api-key:
     type: string
     required: false
+  repo:
+    type: string
+    required: true
+    default: dgmjr-io/DgmjrSdk
+  build-project-path:
+    type: strng
+    required: true
+  configuration:
+    type: string
+    required: false
+    default: Release
+  package-version-override:
+    type: string
+    required: false
+    default: 0.0.1
 
 runs:
   using: composite
@@ -53,5 +68,16 @@ runs:
       run: dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --username ${{ inputs.git-username }} --password ${{ inputs.git-token }} --store-password-in-clear-text
       shell: bash
     - id: Setup-DGMJR-IO-Proget
-      run: dotnet nuget add source ${{ inputs.private-nuget-endpoint }} --name dgmjr-io --username Admin --api-key ${{ inputs.private-nuget-api-key }} --store-password-in-clear-text
+      run: dotnet nuget add source ${{ inputs.private-nuget-endpoint }} --name dgmjr-io --username Admin --password ${{ inputs.private-nuget-api-key }} --store-password-in-clear-text
       shell: bash
+    - id: Restore-the-Packages-Folder
+      uses: dgmjr-io/Packages
+      with:
+        token: ${{ inputs.git-token }}
+        path: Packages
+    - id: Restore-the-Target-Repository
+      uses: ${{ inputs.repo }}
+      with:
+        token: ${{ inputs.git-token }}
+        path: Repo
+        
