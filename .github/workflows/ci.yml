@@ -20,9 +20,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-
       # Runs a single command using the runners shell
       - name: Run setup-dgmjrsdk
         uses: dgmjr-actions/setup-dgmjrsdk@main
@@ -31,6 +28,7 @@ jobs:
           environment: Local
           git-nuget-endpoint: ${{ vars.GIT_NUGET_ENDPOINT }}
           private-nuget-endpoint: ${{ vars.DGMJR_IO_NUGET_ENDPOINT }}
+          private-nuget-api-key: ${{ secrets.PROGET_API_KEY }}
           repo: dgmjr-io/DgmjrSdk
       - name: Verify Git NuGet endpoint installed properly
         shell: bash
