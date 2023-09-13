@@ -68,13 +68,15 @@ runs:
       run: dotnet nuget add source ${{ inputs.private-nuget-endpoint }} --name dgmjr-io --username Admin --password ${{ inputs.private-nuget-api-key }} --store-password-in-clear-text
       shell: bash
     - id: Restore-the-Packages-Folder
-      uses: dgmjr-io/Packages
+      uses: actions/checkout@v3
       with:
-        token: ${{ inputs.git-token }}@main
+        token: ${{ inputs.git-token }}
+        repository: dgmjr-io/Packages
         path: Packages
     - id: Restore-the-Target-Repository
-      uses: ${{ inputs.repo }}
+      uses: actions/checkout@v3
       with:
-        token: ${{ inputs.git-token }}@main
+        token: ${{ inputs.git-token }}
+        repository: ${{ inputs.repo }}
         path: Repo
         
