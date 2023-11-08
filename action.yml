@@ -57,6 +57,9 @@ runs:
       uses: dgmjr-actions/download-global.json@main
       with:
         token: ${{ inputs.git-token }}
+    - id: Restore-minver-cli
+      shell: pwsh
+      run: dotnet tool install -g minver-cli
     - id: Setup-NuGet
       uses: NuGet/setup-nuget@v1.2.0
       with:
