@@ -65,7 +65,12 @@ runs:
       with:
         nuget-api-key: ${{ inputs.nuget-api-key }}
     - id: Setup-GitHub-Packages-NuGet-Source
-      run: dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --username ${{ inputs.git-username }} --password ${{ inputs.git-token }} --store-password-in-clear-text
+      run: |
+        extantGitHubNuget=$(dotnet nuget list source | grep GitHub)
+        if [ -z "$extantGitHubNuget" ]
+        then
+          dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --username ${{ inputs.git-username }} --password ${{ inputs.git-token }} --store-password-in-clear-text
+        fi
       shell: bash
     - id: Setup-DGMJR-IO-Proget
       run: dotnet nuget add source ${{ inputs.private-nuget-endpoint }} --name dgmjr-io --username Admin --password ${{ inputs.private-nuget-api-key }} --store-password-in-clear-text
