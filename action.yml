@@ -8,43 +8,43 @@ branding:
 
 inputs:
   environment:
-    type: string
     default: Local
     required: false
+    description: The environment to build for
   git-token:
-    type: string
     required: true
+    description: GitHub Token
   git-username:
-    type: string
     required: false
     default: dgmjr
+    description: GitHub Username
   git-nuget-endpoint:
-    type: string
     required: false
     default: https://nuget.pkg.github.com/dgmjr-io/index.json
+    description: GitHub NuGet Endpoint
   private-nuget-endpoint:
-    type: string
     required: false
     default: https://proget.dgmjr.io/nuget/live/v3/index.json
+    description: DGMJR-IO ProGet NuGet Endpoint
   private-nuget-api-key:
-    type: string
     required: false
-    default: 
+    default:
+    description: DGMJR-IO ProGet NuGet API Key
   nuget-api-key:
-    type: string
     required: false
+    description: NuGet API Key
   repo:
-    type: string
     required: true
     default: dgmjr-io/DgmjrSdk
+    description: Repository to build
   configuration:
-    type: string
     required: false
     default: Release
+    description: Configuration to build
   package-version-override:
-    type: string
     required: false
     default: 0.0.1
+    description: Version to use for the package
 
 runs:
   using: composite
@@ -71,7 +71,7 @@ runs:
     - id: setup-gh-packages
       name: Setup GitHub Packages NuGet Source
       uses: NuGet/setup-nuget@v1.2.0
-      with: 
+      with:
         nuget-api-key: ${{ inputs.git-token }}
         nuget-api-key-source: ${{ inputs.git-nuget-endpoint }}
       # run: |
@@ -84,7 +84,7 @@ runs:
     - id: setup-proget
       name: Setup DGMJR-IO ProGet
       uses: NuGet/setup-nuget@v1.2.0
-      with: 
+      with:
         nuget-api-key: ${{ inputs.private-nuget-api-key }}
         nuget-api-key-source: ${{ inputs.private-nuget-endpoint }}
     - id: restore-packages
@@ -100,4 +100,3 @@ runs:
         token: ${{ inputs.git-token }}
         repository: ${{ inputs.repo }}
         path: Repo
-        
