@@ -49,22 +49,27 @@ inputs:
 runs:
   using: composite
   steps:
-    - id: Setup-dotnet
+    - id: setup-dotnet
+      name: Setup DotNet
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
-    - id: Restore-dotnet-file
+    - id: restore-dotnet-file
+      name: Restore DotNet File
       uses: dgmjr-actions/download-global.json@main
       with:
         token: ${{ inputs.git-token }}
-    - id: Restore-minver-cli
+    - id: restore-minver
+      name: Restore MinVer CLI
       shell: pwsh
       run: dotnet tool update -g minver-cli
-    - id: Setup-NuGet
+    - id: setup-nuget
+      name: Setup NuGet
       uses: NuGet/setup-nuget@v1.2.0
       with:
         nuget-api-key: ${{ inputs.nuget-api-key }}
-    - id: Setup-GitHub-Packages-NuGet-Source
+    - id: setup-gh-packages
+      name: Setup GitHub Packages NuGet Source
       uses: NuGet/setup-nuget@v1.2.0
       with: 
         nuget-api-key: ${{ inputs.git-token }}
@@ -76,21 +81,23 @@ runs:
       #     dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --username ${{ inputs.git-username }} --password ${{ inputs.git-token }} --store-password-in-clear-text
       #   fi
       # shell: bash
-    - id: Setup-DGMJR-IO-Proget
+    - id: setup-proget
+      name: Setup DGMJR-IO ProGet
       uses: NuGet/setup-nuget@v1.2.0
       with: 
         nuget-api-key: ${{ inputs.private-nuget-api-key }}
         nuget-api-key-source: ${{ inputs.private-nuget-endpoint }}
-    - id: Restore-the-Packages-Folder
-      uses: actions/checkout@v3
+    - id: restore-packages
+      uses: dgmjr-actions/git-checkout@main
       with:
         token: ${{ inputs.git-token }}
         repository: dgmjr-io/Packages
         path: Packages
-    - id: Restore-the-Target-Repository
+    - id: restore-target
+      name: Restore the Target Repository
       uses: dgmjr-actions/git-checkout@main
       with:
         token: ${{ inputs.git-token }}
-        repository: https://github.com/${{ inputs.repo }}
+        repository: ${{ inputs.repo }}
         path: Repo
         
