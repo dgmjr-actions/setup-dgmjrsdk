@@ -88,9 +88,9 @@ runs:
         repository: dgmjr-io/Packages
         path: Packages
     - id: Restore-the-Target-Repository
-      uses: actions/checkout@v3
+      uses: dgmjr-actions/git-checkout@main
       with:
         token: ${{ inputs.git-token }}
-        repository: ${{ inputs.repo }}
+        repository: https://github.com/${{ inputs.repo }}
         path: Repo
         
