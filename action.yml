@@ -64,17 +64,23 @@ runs:
       uses: NuGet/setup-nuget@v1.2.0
       with:
         nuget-api-key: ${{ inputs.nuget-api-key }}
-    # - id: Setup-GitHub-Packages-NuGet-Source
-    #   run: |
-    #     extantGitHubNuget=$(dotnet nuget list source | grep GitHub)
-    #     if [ -z "$extantGitHubNuget" ]
-    #     then
-    #       dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --username ${{ inputs.git-username }} --password ${{ inputs.git-token }} --store-password-in-clear-text
-    #     fi
-    #   shell: bash
-    - id: Setup-DGMJR-IO-Proget
-      run: dotnet nuget add source ${{ inputs.private-nuget-endpoint }} --name dgmjr-io --username Admin --password ${{ inputs.private-nuget-api-key }} --store-password-in-clear-text
+    - id: Setup-GitHub-Packages-NuGet-Source
+      uses: NuGet/setup-nuget@v1.2.0
+      with: 
+        nuget-api-key: ${{ inputs.git-token }}
+        nuget-api-key-source: ${{ inputs.git-nuget-endpoint }}
+      # run: |
+      #   extantGitHubNuget=$(dotnet nuget list source | grep GitHub)
+      #   if [ -z "$extantGitHubNuget" ]
+      #   then
+      #     dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --username ${{ inputs.git-username }} --password ${{ inputs.git-token }} --store-password-in-clear-text
+      #   fi
       shell: bash
+    - id: Setup-DGMJR-IO-Proget
+      uses: NuGet/setup-nuget@v1.2.0
+      with: 
+        nuget-api-key: ${{ inputs.private-nuget-api-key }}
+        nuget-api-key-source: ${{ inputs.private-nuget-endpoint }}
     - id: Restore-the-Packages-Folder
       uses: actions/checkout@v3
       with:
