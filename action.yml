@@ -75,7 +75,7 @@ runs:
       #   then
       #     dotnet nuget add source ${{ inputs.git-nuget-endpoint }} --name GitHub --username ${{ inputs.git-username }} --password ${{ inputs.git-token }} --store-password-in-clear-text
       #   fi
-      shell: bash
+      # shell: bash
     - id: Setup-DGMJR-IO-Proget
       uses: NuGet/setup-nuget@v1.2.0
       with: 
