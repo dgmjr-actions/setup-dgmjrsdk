@@ -1,4 +1,4 @@
-name: Prepares the repo for compilation with the DGMJR-IO SDK
+name: Setup DGMJR-IO SDK
 author: David G. Moore, Jr., <david@dgmjr.io>
 description: Prepares the repo for compilation with the DGMJR-IO SDK
 
