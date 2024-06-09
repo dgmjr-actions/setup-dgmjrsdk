@@ -104,3 +104,4 @@ runs:
       uses: dgmjr-actions/restore-global.json@main
       with:
         token: ${{ inputs.git-token }}
+        restore-dotnet-file: false
